@@ -1,0 +1,15 @@
+services:
+  monitor:
+    build: .
+    container_name: system-monitor
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    # Share the host PID namespace so CPU figures reflect the host.
+    pid: host
+    environment:
+      DISK_PATH: /host
+    volumes:
+      # Host root filesystem, read-only, so disk usage reports the host disk
+      # instead of the container's overlay layer.
+      - /:/host:ro
